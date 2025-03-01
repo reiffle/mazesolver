@@ -1,7 +1,7 @@
 from graphics import Point, Line
 
 class Cell:
-    def __init__(self, win):
+    def __init__(self, win=None):
         self.x1 = None
         self.x2 = None
         self.y1 = None
@@ -18,14 +18,10 @@ class Cell:
         self.y1 = y1
         self.y2 = y2
 
-        if self.wall_left:
-            self.win.draw_line(Line(Point(x1, y1), Point(x1, y2)))
-        if self.wall_right:
-            self.win.draw_line(Line(Point(x2, y1), Point(x2, y2)))
-        if self.wall_top:
-            self.win.draw_line(Line(Point(x1, y1), Point(x2, y1)))
-        if self.wall_bottom:
-            self.win.draw_line(Line(Point(x1, y2), Point(x2, y2)))
+        self.win.draw_line(Line(Point(x1, y1), Point(x1, y2)), "white" if self.wall_left is False else "black")
+        self.win.draw_line(Line(Point(x2, y1), Point(x2, y2)), "white" if self.wall_right is False else "black")
+        self.win.draw_line(Line(Point(x1, y1), Point(x2, y1)), "white" if self.wall_top is False else "black")
+        self.win.draw_line(Line(Point(x1, y2), Point(x2, y2)), "white" if self.wall_bottom is False else "black")
 
     def draw_move(self, to_cell, undo=False):
         start_x = (self.x1 + self.x2) / 2
