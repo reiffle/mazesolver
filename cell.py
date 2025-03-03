@@ -11,17 +11,20 @@ class Cell:
         self.wall_top = True
         self.wall_bottom = True
         self.win=win
+        self.visited = False
 
     def draw(self, x1, y1, x2, y2):
         self.x1 = x1
         self.x2 = x2
         self.y1 = y1
         self.y2 = y2
+        bg_color_true = self.win.bg_color
+        bg_color_false = "black"
 
-        self.win.draw_line(Line(Point(x1, y1), Point(x1, y2)), "white" if self.wall_left is False else "black")
-        self.win.draw_line(Line(Point(x2, y1), Point(x2, y2)), "white" if self.wall_right is False else "black")
-        self.win.draw_line(Line(Point(x1, y1), Point(x2, y1)), "white" if self.wall_top is False else "black")
-        self.win.draw_line(Line(Point(x1, y2), Point(x2, y2)), "white" if self.wall_bottom is False else "black")
+        self.win.draw_line(Line(Point(x1, y1), Point(x1, y2)), bg_color_true if self.wall_left is False else bg_color_false)
+        self.win.draw_line(Line(Point(x2, y1), Point(x2, y2)), bg_color_true if self.wall_right is False else bg_color_false)
+        self.win.draw_line(Line(Point(x1, y1), Point(x2, y1)), bg_color_true if self.wall_top is False else bg_color_false)
+        self.win.draw_line(Line(Point(x1, y2), Point(x2, y2)), bg_color_true if self.wall_bottom is False else bg_color_false)
 
     def draw_move(self, to_cell, undo=False):
         start_x = (self.x1 + self.x2) / 2

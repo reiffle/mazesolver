@@ -1,4 +1,4 @@
-import time
+import time, random
 from cell import Cell
 
 class Maze:
@@ -12,6 +12,7 @@ class Maze:
             cell_size_x,
             cell_size_y,
             win=None,
+            seed=None
         ):
 
         self.x1 = x1 # x1 is the x-coordinate of the top-left corner of the maze
@@ -21,6 +22,8 @@ class Maze:
         self.cell_size_x = cell_size_x
         self.cell_size_y = cell_size_y
         self.win = win
+        if seed:
+            random.seed(seed)
         self._create_cells()
 
     def _create_cells(self):
@@ -54,4 +57,55 @@ class Maze:
         self._cells[self.num_cols-1][self.num_rows-1].wall_right = False
         self._draw_cell(0, 0)
         self._draw_cell(self.num_cols-1, self.num_rows-1)
+
+    def _break_walls_r (self, i, j):
+        self._cells[i][j].visited = True # Mark the cell as visited
+        while True:
+            # Create a list of possible directions (cells not visited yet)
+            possible_directions = []
+        
+            # Check left
+            if i > 0 and not self._cells[i-1][j].visited:
+                possible_directions.append(("left", i-1, j))
+        
+            # Check right
+            if i < self.num_cols-1 and not self._cells[i+1][j].visited:
+                possible_directions.append(("right", i+1, j))
+        
+            # Check up
+            if j > 0 and not self._cells[i][j-1].visited:
+                possible_directions.append(("up", i, j-1))
+        
+            # Check down
+            if j < self.num_rows-1 and not self._cells[i][j+1].visited:
+                possible_directions.append(("down", i, j+1))
+        
+            # If no directions left, draw the cell and return
+            if not possible_directions:
+                self._draw_cell(i, j)
+                return
+        
+            # Choose a random direction
+            choice, new_i, new_j = random.choice(possible_directions)
+
+            if choice == "up" and self._cells[i][j].wall_top:
+                self._cells[i][j].wall_top = False
+                self._cells[new_i][new_j].wall_bottom = False
+            elif choice == "down" and self._cells[i][j].wall_bottom:
+                self._cells[i][j].wall_bottom = False
+                self._cells[new_i][new_j].wall_top = False
+            elif choice == "left" and self._cells[i][j].wall_left:
+                self._cells[i][j].wall_left = False
+                self._cells[new_i][new_j].wall_right = False
+            elif choice == "right" and self._cells[i][j].wall_right:
+                self._cells[i][j].wall_right = False
+                self._cells[new_i][new_j].wall_left = False
+            self._break_walls_r(new_i, new_j) # Recursively call the function with the new coordinates
+
+    def _reset_cells_visited(self):
+        for col in range(self.num_cols):
+            for row in range(self.num_rows):
+                self._cells[col][row].visited = False
+
+
         

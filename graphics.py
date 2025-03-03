@@ -1,11 +1,12 @@
 from tkinter import Tk, BOTH, Canvas
 
 class Window:
-    def __init__(self, width, height):
+    def __init__(self, width, height, bg_color="white"):
         self.root = Tk()
         self.root.protocol("WM_DELETE_WINDOW", self.close)
         self.root.title("Maze Solver")
-        self.canvas = Canvas(self.root, bg="white", width=width, height=height)
+        self.bg_color = bg_color
+        self.canvas = Canvas(self.root, bg=self.bg_color, width=width, height=height)
         self.canvas.pack(fill=BOTH, expand=True)
         self.running = False
         
