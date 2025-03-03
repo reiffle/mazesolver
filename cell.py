@@ -31,4 +31,5 @@ class Cell:
         start_y = (self.y1 + self.y2) / 2
         end_x = (to_cell.x1 + to_cell.x2) / 2
         end_y = (to_cell.y1 + to_cell.y2) / 2
-        self.win.draw_line(Line(Point(start_x, start_y), Point(end_x, end_y)), "gray" if undo else "red")
+        width = abs(self.x1 - self.x2) / 4
+        self.win.draw_line(Line(Point(start_x, start_y), Point(end_x, end_y)), "red" if undo else "green", width)
